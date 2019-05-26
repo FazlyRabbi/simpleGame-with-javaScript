@@ -15,37 +15,40 @@
 
   const winnerr = document.getElementById("winner");
 
+  const alert = document.getElementById("alert");
+  alert.style.display = "none"
+
   winnerr.style.visibility = "hidden";
 
   let p1Score = 0;
   let p2Score = 0;
   let widingScoreD = 5;
-  let isWinner = false;
+  let gameOver = false;
 
   //create random number
   function createRandomNumber(number) {
     number = Math.floor(number);
 
-    return Math.floor(Math.random() * number);
+    return Math.floor(Math.random() * number) + 1;
   }
 
   //print random number for player1
 
   function randoms() {
-    const rendomNum = createRandomNumber(widingScoreD);
+    const rendomNum = createRandomNumber(6);
 
     p1Score += rendomNum;
   }
 
   //print random number for player2
+
   function randoms2() {
-    const rendomNum = createRandomNumber(widingScoreD);
+    const rendomNum = createRandomNumber(6);
     p2Score += rendomNum;
   }
 
   function winner(oldScore, winingScore) {
     if (oldScore === winingScore || oldScore > winingScore) {
-      isWinner = true;
       if (p1Score === winingScore || p1Score > winingScore) {
         p1ScoreDisplay.style.color = "green";
         winnerr.textContent =
@@ -66,11 +69,13 @@
   function resetBtn() {
     p1Score = 0;
     p2Score = 0;
-
+  
     p1ScoreDisplay.textContent = "0";
     p2ScoreDisplay.textContent = "0";
     p1ScoreDisplay.style.color = null;
     p2ScoreDisplay.style.color = null;
+    // widingScore.textContent = "5"
+    gameOver = false;
 
     p1btn.removeAttribute("disabled");
     p2btn.removeAttribute("disabled");
@@ -81,35 +86,64 @@
 
   //plyer1 button
   p1btn.addEventListener("click", () => {
-    randoms();
-
-    p1ScoreDisplay.textContent = p1Score;
-
-    winner(p1Score, widingScoreD);
+    if (!gameOver) {
+      randoms();
+      if (widingScoreD === p1Score || widingScoreD < p1Score) {
+        
+        gameOver = true;
+        winner(p1Score, widingScoreD);
+      }
+      p1ScoreDisplay.textContent = p1Score;
+    }
   });
 
   //plyer2 button
 
   p2btn.addEventListener("click", () => {
-    randoms2();
+    if (!gameOver) {
+      randoms2();
 
-    p2ScoreDisplay.textContent = p2Score;
-
-    winner(p2Score, widingScoreD);
+      if (widingScoreD === p2Score || widingScoreD < p2Score) {
+        gameOver = true;
+        winner(p2Score, widingScoreD);
+      }
+      p2ScoreDisplay.textContent = p2Score;
+    }
   });
 
   resbtn.addEventListener("click", () => {
     resetBtn();
   });
 
-  inputField.addEventListener("keypress", function() {
-    if (event.keyCode === 13) {
-      widingScore.textContent = this.value;
-      widingScoreD = Number(this.value);
+  inputField.addEventListener("change", () => {
+    
+    inputNum = parseInt(inputField.value, 10);
+  
+    if(inputNum){
+      alert.style.display = "none"
+      widingScoreD = Number(inputField.value);
+      widingScore.textContent = inputField.value;
+   
+    }else{
+    
+      alert.style.display = "block"
 
-      event.target.value = "";
     }
+   
+
+   
+    inputField.value = " ";
+    resetBtn();
   });
+
+  // inputField.addEventListener("keypress", function() {
+  //   if (event.keyCode === 13) {
+  //     widingScore.textContent = this.value;
+  //     widingScoreD = Number(this.value);
+
+  //     event.target.value = "";
+  //   }
+  // });
 })();
 
 // create random number with min and max range
