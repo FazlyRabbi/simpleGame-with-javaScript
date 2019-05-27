@@ -39,13 +39,11 @@
 
   const n1 = createRandomNumber(widingScoreD);
 
-  console.log(n1)
   p1Score += n1;
   //print random number for player1
  
 
   //print random number for player
-console.log(p1Score)
 
  function randomsRange() {
   const rendomNum = createRandomNumber(widingScoreD - p1Score);
